@@ -124,7 +124,7 @@ public class A1 {
 
     private static void writeResults(List<Boolean> results) {
         try {
-            String resultsFile = "src/main/java/_2022/A1/A1results.txt";
+            String resultsFile = "src/main/java/_2022/A1/A1Output.txt";
             PrintWriter writer = new PrintWriter(resultsFile, StandardCharsets.UTF_8);
             for (int i = 0; i < results.size(); i++) {
                 String result = results.get(i) ? "YES" : "NO";
