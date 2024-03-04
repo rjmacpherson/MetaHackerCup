@@ -1,6 +1,8 @@
-package _2022.A1;
+package _2022.A2;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -25,7 +27,7 @@ import java.util.stream.Collectors;
  *   N - number of cards
  *   K - times to cut the deck
  */
-public class A1 {
+public class Solution {
     public static void main(String[] args) {
         List<TestCase> testCases = readFileInput();
         List<Boolean> results = processTestCases(testCases);
@@ -34,7 +36,7 @@ public class A1 {
 
     private static List<TestCase> readFileInput() {
         // TODO: Update here to change input file
-        String inputFile = "src/main/java/_2022/A1/A1Input.txt";
+        String inputFile = "src/main/java/_2022/A1/Input.txt";
         Path inputPath = Paths.get(inputFile);
         List<TestCase> testCases = new ArrayList<>();
         try(BufferedReader reader = Files.newBufferedReader(inputPath)) {
@@ -124,7 +126,7 @@ public class A1 {
 
     private static void writeResults(List<Boolean> results) {
         try {
-            String resultsFile = "src/main/java/_2022/A1/A1Output.txt";
+            String resultsFile = "src/main/java/_2022/A1/Output.txt";
             PrintWriter writer = new PrintWriter(resultsFile, StandardCharsets.UTF_8);
             for (int i = 0; i < results.size(); i++) {
                 String result = results.get(i) ? "YES" : "NO";
