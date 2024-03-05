@@ -1,6 +1,7 @@
 package _2022.A2;
 
 import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
@@ -14,9 +15,9 @@ import java.util.Scanner;
 import java.util.stream.Collectors;
 
 /**
- *  Consecutive Cuts - Chapter 1
+ *  Consecutive Cuts - Chapter 2
  *  There are N cards per test case
- *  They display integers between 1 to N
+ *  They display integers between 1 to N, card values are not guaranteed to be distinct
  *  Cutting the deck reshuffles order
  *  A is the initial order, B is the desired order
  *  We can make K cuts to reach B
@@ -28,15 +29,22 @@ import java.util.stream.Collectors;
  *   K - times to cut the deck
  */
 public class Solution {
+    public static final String INPUT_FILE = "src/main/java/_2022/A2/SampleInput.txt";
+    public static final String OUTPUT_FILE = "src/main/java/_2022/A2/SampleOutput.txt";
+    public static final String EXPECTED_OUTPUT_FILE = "src/main/java/_2022/A2/ExpectedSampleOutput.txt";
+    public static final boolean SHOULD_VERIFY = true;
+
     public static void main(String[] args) {
-        List<TestCase> testCases = readFileInput();
+        List<TestCase> testCases = readFileInput(INPUT_FILE);
         List<Boolean> results = processTestCases(testCases);
-        writeResults(results);
+        writeResults(results, OUTPUT_FILE);
+        if(SHOULD_VERIFY) {
+            boolean result = verifyOutputFile(OUTPUT_FILE, EXPECTED_OUTPUT_FILE);
+            System.out.println("Verification Result: " + result);
+        }
     }
 
-    private static List<TestCase> readFileInput() {
-        // TODO: Update here to change input file
-        String inputFile = "src/main/java/_2022/A1/Input.txt";
+    private static List<TestCase> readFileInput(String inputFile) {
         Path inputPath = Paths.get(inputFile);
         List<TestCase> testCases = new ArrayList<>();
         try(BufferedReader reader = Files.newBufferedReader(inputPath)) {
@@ -104,6 +112,8 @@ public class Solution {
         if(K == 1 && initialOrder.equals(desiredOrder)) {
             return false;
         }
+
+        // TODO: How does this change if we can have any numbers
         // If only 2 cards
         if(N == 2) {
             // If they are ordered, must cut even times
@@ -124,10 +134,9 @@ public class Solution {
         return initialOrder.equals(cutOrder);
     }
 
-    private static void writeResults(List<Boolean> results) {
+    private static void writeResults(List<Boolean> results, String outputFile) {
         try {
-            String resultsFile = "src/main/java/_2022/A1/Output.txt";
-            PrintWriter writer = new PrintWriter(resultsFile, StandardCharsets.UTF_8);
+            PrintWriter writer = new PrintWriter(outputFile, StandardCharsets.UTF_8);
             for (int i = 0; i < results.size(); i++) {
                 String result = results.get(i) ? "YES" : "NO";
                 writer.println("Case #" + (i + 1) + ": " + result);
@@ -135,6 +144,35 @@ public class Solution {
             writer.close();
         } catch (IOException e) {
             throw new RuntimeException(e);
+        }
+    }
+
+    private static boolean verifyOutputFile(String actualFile, String expectedFile) {
+        try {
+            BufferedReader actualReader = new BufferedReader(new FileReader(actualFile));
+            BufferedReader expectedReader = new BufferedReader(new FileReader(expectedFile));
+            String actualLine = actualReader.readLine();
+            String expectedLine = expectedReader.readLine();
+            boolean areEqual = true;
+            int lineNum = 1;
+
+            while (actualLine != null || expectedLine != null) {
+                if (actualLine == null || expectedLine == null) {
+                    areEqual = false;
+                    break;
+                } else if (!actualLine.equalsIgnoreCase(expectedLine)) {
+                    areEqual = false;
+                    break;
+                }
+                actualLine = actualReader.readLine();
+                expectedLine = expectedReader.readLine();
+                lineNum++;
+            }
+            actualReader.close();
+            expectedReader.close();
+            return areEqual;
+        } catch (IOException e) {
+            throw new RuntimeException();
         }
     }
 
